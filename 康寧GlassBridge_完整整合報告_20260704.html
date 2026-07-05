@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>康寧 Glass Bridge 完整整合報告</title>
+<style>
+:root{--g:#1a7f3c;--r:#c0392b;--o:#d68910;--b:#1f4e79;--bg:#f7f8fa;}
+*{box-sizing:border-box;}
+body{font-family:"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.8;color:#222;background:var(--bg);margin:0;padding:0;}
+.wrap{max-width:1000px;margin:0 auto;padding:24px;}
+header{background:linear-gradient(135deg,#0b3d5c,#1c7fb8);color:#fff;padding:32px 26px;border-radius:10px;margin-bottom:22px;}
+header h1{margin:0 0 12px;font-size:1.7em;}
+header .meta p{margin:2px 0;font-size:.9em;opacity:.95;}
+nav{background:#fff;border-radius:10px;padding:16px 22px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);font-size:.92em;}
+nav b{color:var(--b);} nav a{color:#2e86c1;text-decoration:none;}
+nav ol{margin:8px 0 0;padding-left:22px;} nav li{margin:3px 0;}
+section{background:#fff;border-radius:10px;padding:22px 26px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+h2{color:var(--b);border-left:5px solid var(--b);padding-left:12px;margin-top:0;font-size:1.32em;}
+h3{color:#0b3d5c;margin:18px 0 4px;font-size:1.08em;border-bottom:1px solid #eef;padding-bottom:3px;}
+p{margin:8px 0;}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.86em;}
+th,td{border:1px solid #ddd;padding:7px 9px;text-align:center;vertical-align:top;}
+th{background:#eef3f8;color:#1f4e79;} td.l,th.l{text-align:left;}
+.summary{background:#eef7f0;border-left:4px solid var(--g);padding:10px 14px;margin-top:12px;border-radius:4px;font-size:.93em;}
+.src{font-size:.8em;color:#555;} .src a{color:#2e86c1;}
+.warn{background:#fff8e1;border:1px solid #f0c869;border-radius:6px;padding:12px 16px;margin:14px 0;}
+.think{background:#fdf0f0;border:1px solid #e6a8a8;border-radius:6px;padding:12px 16px;margin:14px 0;}
+.card{border:1px solid #e2e8f0;border-radius:8px;padding:14px 16px;margin:14px 0;background:#fcfdff;}
+.card.win{border-left:5px solid var(--g);} .card.risk{border-left:5px solid var(--r);} .card.mid{border-left:5px solid var(--o);}
+.tag{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.78em;color:#fff;margin-left:6px;}
+.t-win{background:#1a7f3c;}.t-risk{background:#c0392b;}.t-mid{background:#d68910;}
+.pos{color:var(--g);font-weight:600;} .neg{color:var(--r);font-weight:600;} .flag{color:var(--r);}
+.lbl{font-weight:700;color:#0b3d5c;}
+.final{border:2px solid var(--b);border-radius:10px;background:#f0f6fc;}
+.disclaimer{font-size:.82em;color:#666;border-top:1px dashed #bbb;margin-top:16px;padding-top:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>康寧 Glass Bridge — 完整整合報告</h1>
+  <div class="meta">
+    <p><strong>涵蓋</strong>：技術詳解 → CPO 痛點 → 大廠規格與 EC/SGC 路線 → 供應鏈全景 → 光模組廠 → FAU 雙雄因應 → 承壓股深入 → 受惠股逐檔優勢 → 多空總表與判斷</p>
+    <p><strong>整理時間</strong>：2026-07-04（台北時間）｜股價／營收至 2026-07-03（FinMind API）；規格與供應鏈關係來源見各段超連結</p>
+  </div>
+</header>
+
+<nav>
+<b>章節導覽</b>
+<ol>
+<li><a href="#s1">Glass Bridge 是什麼（技術詳解）</a></li>
+<li><a href="#s2">它打到 CPO 的什麼痛點</a></li>
+<li><a href="#s3">大廠規格與技術路線：COUPE、NVIDIA/Broadcom、EC vs SGC</a></li>
+<li><a href="#s4">對台灣光通訊/CPO 供應鏈的影響全景（雙面刃）</a></li>
+<li><a href="#s5">AI 光收發模組廠是誰？為何影響較小</a></li>
+<li><a href="#s6">FAU 雙雄：上詮、波若威——受衝擊、因應、發展路線</a></li>
+<li><a href="#s7">承壓／該留意個股逐檔深入</a></li>
+<li><a href="#s8">受惠個股逐檔詳述（各自競爭優勢）</a></li>
+<li><a href="#s9">多空全景總表</a></li>
+<li><a href="#s10">綜合判斷、風險與資料限制</a></li>
+</ol>
+</nav>
+
+<section id="s1">
+<h2>1. 康寧 Glass Bridge 是什麼（技術詳解）</h2>
+<table>
+<tr><th class="l">項目</th><th class="l">內容</th></tr>
+<tr><td class="l">發表時間／場合</td><td class="l">2026/06/24，韓國首爾「AI 資料中心光通訊與互連技術大會」正式發表</td></tr>
+<tr><td class="l">本質</td><td class="l">一個「光纖到光子晶片（Fiber-to-PIC）」的<strong>玻璃光學互連平台</strong>，是康寧 GlassWorks AI 光互連方案的一環</td></tr>
+<tr><td class="l">核心技術</td><td class="l"><strong>晶圓級玻璃離子交換（IOX）波導</strong>：在玻璃內部形成光傳輸路徑，把光纖直接耦合到 PIC；並以玻璃穿孔（TGV）+ 覆晶封裝銜接玻璃基板半導體封裝</td></tr>
+<tr><td class="l">規格重點</td><td class="l">支援 30μm 以上間距、目標耦合損耗 &lt; 2dB、採<strong>被動對準（passive alignment）</strong>，不需昂貴的主動對準設備</td></tr>
+<tr><td class="l">官方定位</td><td class="l">康寧強調是既有 FAU（光纖陣列單元）技術的<strong>「補充（complement）」而非「取代（replace）」</strong></td></tr>
+<tr><td class="l">市場反應</td><td class="l">康寧美股發表後單日一度大漲 8～15%、續創新高，今年以來累計漲幅約 176%</td></tr>
+</table>
+<div class="summary"><strong>白話</strong>：Glass Bridge 用「玻璃波導 + 被動對準」把光纖接到矽光子晶片，象徵康寧把「玻璃霸權」從封裝載板延伸到光纖耦合層。它挑戰的是現行「主動對準 + FAU」的組裝方式。</div>
+<p class="src">出處：<a href="https://technews.tw/2026/07/01/corning-glassbridge-fiber-to-pic-connector-technology/" target="_blank">TechNews</a>、<a href="https://www.ctee.com.tw/news/20260630700094-439901" target="_blank">工商時報：GlassBridge 是什麼</a>、<a href="https://finance.biggo.com/news/0f780f05-a94b-4ca4-8f5a-da29f9036770" target="_blank">BigGo</a></p>
+</section>
+
+<section id="s2">
+<h2>2. 它打到 CPO 的什麼痛點</h2>
+<p>CPO（共同封裝光學）最麻煩的環節是「<strong>光纖對準</strong>」：PIC 上的波導只有數百奈米寬，光纖芯徑卻是數微米，兩者尺寸差數十倍（業界稱「維度落差 / Dimensional Gap」）。傳統作法要靠 <strong>FAU + 精密主動對準設備</strong>，慢、貴、良率難。</p>
+<ul>
+<li>Glass Bridge 用玻璃波導 + 被動對準，想「拆掉這個對準的收費站」，簡化組裝、提高光纖介面密度與可擴充性。</li>
+<li>它被視為現行 CPO 架構中「智慧型光纖陣列（iFAU）」的<strong>演進式替代方案</strong>——這正是市場擔憂之處。</li>
+</ul>
+<div class="summary"><strong>重點</strong>：Glass Bridge 直指 CPO 量產最大瓶頸（對準與良率）；若成功，CPO 商轉會加速，但傳統 FAU/對準生態的角色會被重新定義。</div>
+<p class="src">出處：<a href="https://finance.biggo.com/news/0f780f05-a94b-4ca4-8f5a-da29f9036770" target="_blank">BigGo：Dimensional Gap</a>、<a href="https://www.ledinside.com.tw/news/20260626-40659.html" target="_blank">LEDinside</a></p>
+</section>
+
+<section id="s3">
+<h2>3. 大廠規格與技術路線：COUPE、NVIDIA/Broadcom、EC vs SGC</h2>
+<p>「最新光通訊大廠規格」不是單一數字，而是<strong>一套平台 + 一種光耦合技術路線</strong>。</p>
+<h3>平台與系統規格</h3>
+<table>
+<tr><th class="l">層次</th><th class="l">大廠規格／平台</th><th class="l">出處</th></tr>
+<tr><td class="l">晶片級整合平台</td><td class="l"><strong>台積電 COUPE</strong>（Compact Universal Photonic Engine，2024/12 發表、PDK 已備妥，2026 量產），NVIDIA Vera Rubin／Rubin Ultra 世代 CPO 採用</td><td class="l"><a href="https://naipnews.naipo.com/42316/" target="_blank">北美智權報</a>、<a href="https://leveragetw.com/tsmc-coupe/" target="_blank">槓桿學院</a></td></tr>
+<tr><td class="l">交換器／系統</td><td class="l"><strong>NVIDIA Spectrum-X／Quantum-X Photonics</strong>（GTC 2025 發表；Spectrum-X Ethernet Photonics 2026 H2 推出、頻寬上看 409.6Tb/s）；<strong>Broadcom Tomahawk 6／Bailly</strong></td><td class="l"><a href="https://www.nvidia.com/en-us/networking/products/silicon-photonics/" target="_blank">NVIDIA 官網</a>、<a href="https://money.udn.com/money/story/11162/9202954" target="_blank">經濟日報</a></td></tr>
+</table>
+<h3>光耦合兩路線：EC vs SGC（尚未分出高下、將長期並存）</h3>
+<p>CPO 把光纖接到 PIC 有兩條技術路線，兩者<strong>目前都還在發展、並存，短期不會由單一方案通吃</strong>：</p>
+<table>
+<tr><th class="l">路線</th><th class="l">優點</th><th class="l">缺點</th><th class="l">代表陣營</th></tr>
+<tr><td class="l"><strong>SGC 表面光柵耦合</strong>（垂直，光從晶片上方進出）</td><td class="l">封裝容易、<strong>晶圓級測試方便</strong>、量產成熟</td><td class="l">耦合效率較低、<strong>光損耗較高</strong></td><td class="l">Intel、Cisco(Luxtera)、台積電（部分）</td></tr>
+<tr><td class="l"><strong>EC 邊緣耦合</strong>（側邊，光從晶片側邊進出）</td><td class="l"><strong>光損耗低、效率高</strong>、更適合高速光互連</td><td class="l">封裝難度高、<strong>對準精度要求高</strong></td><td class="l">康寧 Glass Bridge、800G/1.6T 高速走向</td></tr>
+</table>
+<p><span class="lbl">為什麼還沒分高下：</span></p>
+<p>1. <strong>設計階段就綁死、不可事後互換</strong>：耦合方式在 PIC 設計初期就選定。晶片若設計成 SGC，就無法直接改用走 EC 的 Glass Bridge；反之亦然。兩者不是「你死我活的替代」，而是<strong>不同 PIC 設計、不同封裝製程、不同供應鏈的兩套生態</strong>。</p>
+<p>2. <strong>各有場景</strong>：SGC 量產成熟、晶圓級測試方便，早期導入有優勢；EC 低損耗、高效率，在 <strong>800G/1.6T 以上高速的占比正在提高</strong>。</p>
+<p>3. <strong>大廠雙軌</strong>：台積電 COUPE 平台<strong>同時支援</strong>光柵耦合與邊緣耦合；Intel、Broadcom 各有路線圖。業界預期<strong>規格收斂要到 2026～2027 年</strong>才逐步明朗。</p>
+<div class="think"><strong>關鍵理解</strong>：康寧 Glass Bridge 走 EC，並非「押錯邊」（高速趨勢反而利 EC），而是它天生只相容於採 EC 設計的客戶。FAU 台廠敢說「生態不同、非直接競爭」，底氣就在此——短期客戶無法互換，Glass Bridge 難立刻搶走 SGC 生態的訂單。</div>
+<div class="warn">⚠ <strong>誠實說明</strong>：NVIDIA／Broadcom 給供應商的<strong>逐項規格書是非公開的</strong>。以上 EC/SGC 現況源自財經媒體（工商時報、元大證券）與產業界受訪，屬方向性解讀，非官方規格書。</div>
+<p class="src">出處：<a href="https://www.ctee.com.tw/news/20260630700097-439901" target="_blank">工商：CPO 兩路技術全卡位</a>、<a href="https://www.simpletechtrend.com/post/ofc2026-corning-glass-waveguide-cpo-scaling" target="_blank">OFC2026 玻璃波導與表面耦合</a>、<a href="https://www.ttv.com.tw/finance/view/072026010913081F78A656534625A55EAC63D1DDCEF0CE69/587" target="_blank">台視：業者稱耦合架構本就不同</a>、<a href="https://www.esunsec.com.tw/article/post/560" target="_blank">元大證券</a></p>
+</section>
+
+<section id="s4">
+<h2>4. 對台灣光通訊/CPO 供應鏈的影響全景（雙面刃）</h2>
+<p>Glass Bridge 對台廠是雙面刃，可分「威脅面」與「受惠面」兩條線看。</p>
+<h3>威脅面（受害）</h3>
+<ul>
+<li>華爾街（大摩、花旗）：<strong>最直接面臨顛覆壓力的是 FAU 廠商</strong>；AI 光收發模組廠影響相對有限。</li>
+<li>台股實際反應：光通訊族群 6/29 起重挫，<span class="flag">上詮（3363）、波若威（3163）自 5 月高點回檔約 35～45%</span>；環宇-KY（4991）、光聖（6442）、聯鈞（3450）同步承壓。</li>
+</ul>
+<h3>受惠面（把餅做大）</h3>
+<ul>
+<li>Glass Bridge 象徵「玻璃半導體 + 高密度光學」時代降臨，<strong>加速 CPO 整體商轉</strong>；資金當日從 CPO/FAU 轉向<strong>玻璃基板</strong>主線。</li>
+<li>大摩/花旗同時指出：<strong>未來 1～2 年 Glass Bridge 難有實質商業衝擊</strong>，現行 CPO 方案已量產、2H27 前設計不易被取代——短期基本面衝擊有限。</li>
+</ul>
+<div class="think"><strong>最重要的觀念</strong>：「Glass Bridge 讓需求變大」對<strong>傳統 FAU 廠商並不成立、甚至相反</strong>（所以 FAU 雙雄大跌）；真正「自家產品需求變大」的，是<strong>玻璃基板製造鏈</strong>（載板、玻璃加工、TGV 設備、檢測，見第 8 章）。</div>
+<p class="src">出處：<a href="https://news.cnyes.com/news/id/6517020" target="_blank">鉅亨：華爾街指 FAU 面臨顛覆</a>、<a href="https://finance.biggo.com/news/3a55b7c6-504f-4fd7-84d5-db01180f454d" target="_blank">大摩/花旗：2 年內難顛覆</a>、<a href="https://www.moneyweekly.com.tw/ArticleData/Info/Article/234548" target="_blank">理財周刊：玻璃基板三雄</a></p>
+</section>
+
+<section id="s5">
+<h2>5. AI 光收發模組廠是誰？為何影響較小</h2>
+<p><span class="lbl">光收發模組（Optical Transceiver）</span>負責把電訊號轉成光訊號、在資料中心之間傳輸（如 800G、1.6T 模組）。台廠依供應鏈位置分三層：</p>
+<table>
+<tr><th class="l">供應鏈位置</th><th class="l">代表台廠</th><th class="l">做什麼</th></tr>
+<tr><td class="l">① 模組設計/封裝</td><td class="l">華星光 4979、眾達-KY 4977、前鼎 4908、訊芯-KY 6451</td><td class="l">800G/1.6T 光收發模組組裝、封裝、測試</td></tr>
+<tr><td class="l">② 矽光子/雷射光源</td><td class="l">聯亞 3081、光環 3234、波若威（跨足）</td><td class="l">矽光子模組、雷射二極體、光源</td></tr>
+<tr><td class="l">③ 上游化合物半導體磊晶</td><td class="l">聯亞 3081（InP）、環宇-KY 4991（InP/GaAs）、全新 5490（GaAs）</td><td class="l">發射/接收端磊晶基板代工</td></tr>
+</table>
+<p><span class="lbl">為什麼 Glass Bridge 對它們影響較小</span>：Glass Bridge 改變的是 CPO 內部「光纖對準到 PIC」這道封裝製程，衝擊的是<strong>對準/FAU 環節</strong>；而模組廠賣的是「模組、雷射、磊晶基板」本身。不論最後對準用 FAU 還是玻璃波導，<strong>AI 資料中心對光源、模組、磊晶的需求都持續放大</strong>（2025 年全球 800G 以上模組約 2,400 萬支，2026 年估近 6,300 萬組、年增約 2.6 倍）。所以模組廠是「需求持續成長、但不在被替代的那道製程上」。</p>
+<div class="warn">⚠ 注意：模組廠「影響較小」不等於「完全無關」。長期 CPO 若把光引擎內建進交換器，傳統「可插拔模組」會被壓縮；但雷射光源、矽光子、磊晶基板等仍是剛需甚至受惠。這是「模組型態改變、但光需求變大」的結構。</div>
+<p class="src">出處：<a href="https://cmnews.com.tw/article/money-f4c1b703-ae62-11f0-b775-ff306a7a9bdc" target="_blank">CMoney：1.6T 光模組需求</a>、<a href="https://money.udn.com/money/story/5612/9210221" target="_blank">經濟日報：華星光、眾達</a>、<a href="https://www.wealth.com.tw/articles/a374e160-f795-42ec-bef9-d452bdeed8b2" target="_blank">財訊：光通訊供應鏈</a></p>
+</section>
+
+<section id="s6">
+<h2>6. FAU 雙雄：上詮、波若威——受衝擊、因應、發展路線</h2>
+<p>上詮與波若威是被 Glass Bridge 利空打到的「FAU 雙雄」。它們的因應不是「大轉型改玻璃波導」，而是「綁緊台積電 COUPE 生態、跨多耦合架構、往更高速走」，並各有一塊較難被 Glass Bridge 取代的利基。</p>
+
+<div class="card mid">
+<h3>上詮 3363 <span class="tag t-mid">FAU 龍頭 / 綁 COUPE</span></h3>
+<p><span class="lbl">現況</span>：收 581 元（自 5 月高 946 回檔約 38%）；5 月營收 1.44 億、YoY -25%（去年基期高、CPO 尚未放量）。</p>
+<p><span class="lbl">因應與發展</span>：① FAU <strong>已取得台積電 COUPE 生態系認證</strong>，與台積電、群創共同開發 CPO 耦合，切入技術更難的 Rubin 世代 CPO XPU（COUPE 同時支援 EC/SGC，等於不押單一路線）。② 依量產規劃，<strong>2026 Q3 交付 1.6T & 3.2T FAU、Q4 交付 6.4T FAU</strong>；速度愈高、對準與可靠度門檻愈高，正是 FAU 價值所在。③ 關鍵驗證點是「2026 H2 的 1.6T FAU 量產交貨」與「毛利率能否回到 15% 以上」。</p>
+<p><span class="lbl">能不能改玻璃波導？</span>玻璃波導（IOX）是康寧材料強項，台廠短期難直接複製；上詮的路是<strong>在「光纖到 PIC 的對準與封裝」保有 know-how</strong>。<span class="lbl">最大變數</span>：若客戶大量改採 Glass Bridge 的 EC 玻璃方案，傳統 FAU 需求會被稀釋。</p>
+</div>
+
+<div class="card mid">
+<h3>波若威 3163 <span class="tag t-mid">光纖套件 / NVIDIA 點名</span></h3>
+<p><span class="lbl">現況</span>：收 818 元（自 5 月高 1300 回檔約 37%）；5 月營收 2.12 億、YoY +30%，2026/1 月營收年增近 48%，動能較上詮實。</p>
+<p><span class="lbl">因應與發展</span>：① 主戰場不完全是 FAU，而是「<strong>光纖套件（Fiber Harness）+ 光纖配線盒（Shuffle Module）</strong>」——負責 CPO 平台內的<strong>高密度光纖路由</strong>，技術門檻高於傳統光模組。② 是 NVIDIA Spectrum-X <strong>直接點名供應商</strong>、也進 Google 供應鏈，2026 量產；市場認為波若威、華星光有望搶單。③ <strong>不受影響的利基</strong>：Glass Bridge 解決的是「光纖接到晶片」那一小段，但 CPO 平台內高密度光纖路由、配線、套件仍需要波若威這類廠商，<strong>這塊相對遠離 Glass Bridge 替代火線</strong>。</p>
+</div>
+
+<div class="summary"><strong>兩檔共同點</strong>：因應是「留在光纖耦合/路由/套件的專業、綁台積電 COUPE 與 NVIDIA 生態、往 1.6T/3.2T/6.4T 更高速爬」，而非硬改玻璃波導。它們賭「多耦合架構並存 + 高速門檻墊高 FAU 價值」。<strong>2026 下半年的量產交貨與毛利率是勝負驗證期</strong>；若客戶大幅倒向 Glass Bridge 玻璃方案，才是真正利空。</div>
+<p class="src">出處：<a href="https://money.udn.com/money/story/12040/9596362" target="_blank">經濟日報：波若威、上詮誰值得等下半年</a>、<a href="https://udn.com/news/story/7253/9601081" target="_blank">聯合：波若威、華星光有望搶單</a>、<a href="https://www.ctee.com.tw/news/20260630700097-439901" target="_blank">工商：上詮取得 COUPE 認證</a></p>
+</section>
+
+<section id="s7">
+<h2>7. 承壓／該留意個股逐檔深入（原因＋因應＋優勢）</h2>
+<p>就「大廠 CPO design-win + 量產 + Glass Bridge 讓自家需求變大」而言，以下個股不明確符合、且正受利空承壓，研究優先度較低——但各有自身處境與優勢，逐檔說明。</p>
+
+<div class="card risk">
+<h3>光聖 6442 <span class="tag t-risk">FAU/光纖 承壓</span></h3>
+<p><span class="lbl">為何承壓</span>：光纖光纜、集線盒，並透過轉投資切入 CPO 主動元件/FAU；Glass Bridge 打的正是 FAU/對準這條線。</p>
+<p><span class="lbl">因應策略</span>：採「<strong>轉投資分工</strong>」——以<strong>合聖</strong>為 CPO 研發主力（設計 ELS 模組、FAU 等零組件），光聖負責部分代工；本業守 OCS 光纖光纜、集線盒，並布局低軌衛星。</p>
+<p><span class="lbl">優勢／劣勢</span>：本業光纖光纜/OCS/集線盒穩健、產品線多元；CPO 只是選擇權。<span class="flag">劣勢</span>：CPO 競爭力靠轉投資非自身主體，且傳統 FAU 暴露於 Glass Bridge 風險。</p>
+</div>
+
+<div class="card risk">
+<h3>聯鈞 3450 <span class="tag t-risk">雷射元件 邊緣</span></h3>
+<p><span class="lbl">為何承壓</span>：雷射二極體/光通訊元件廠，非 CPO 對準/FAU 核心 design-in，屬「光通訊族群一起被殺」的連帶承壓。</p>
+<p><span class="lbl">因應/優勢</span>：本業雷射元件仍受惠 AI 光模組整體需求；但在 Glass Bridge/玻璃基板主線上<strong>既非直接受害、也非直接受惠</strong>，題材純度最低，就篩選條件而言優先度低。</p>
+</div>
+
+<div class="card mid">
+<h3>環宇-KY 4991 <span class="tag t-mid">化合物磊晶（偏被錯殺）</span></h3>
+<p><span class="lbl">為何被歸承壓</span>：發布當日被媒體一起點名。但它做的是<strong>InP/GaAs 化合物半導體磊晶基板代工</strong>（發射端 InP、接收端 GaAs），屬<strong>光模組上游</strong>，不在 Glass Bridge 替代的對準環節。</p>
+<p><span class="lbl">優勢</span>：化合物半導體磊晶，隨 AI 光模組需求成長而受惠，<strong>本質較接近「光需求變大」的受惠者、屬被錯殺</strong>。但其受惠來自「光模組總量成長」而非「Glass Bridge 本身」，與本題的直接關聯是間接的。</p>
+</div>
+
+<div class="card risk">
+<h3>大立光 3008 <span class="tag t-risk">CPO 非主業</span></h3>
+<p><span class="lbl">為何留意</span>：手機鏡頭王，正跨向 AI 資料中心核心零件，以<strong>模造玻璃（Molding Glass）+ FAU</strong> 切入 CPO/矽光子（董座林恩平親自說明）。但<strong>CPO/FAU 非主業、量產貢獻低</strong>，且模造玻璃與康寧玻璃波導是不同技術。</p>
+<p><span class="lbl">優勢／劣勢</span>：最強是<strong>精密光學模造能力 + 極強現金流</strong>，足以長期慢磨 CPO/FAU，成本防禦也被認為能對抗玻璃基板高成本。<span class="flag">劣勢</span>：CPO 是「新事業、未放量」，短期獲利貢獻有限，就 Glass Bridge 直接受惠而言純度低。</p>
+</div>
+<p class="src">出處：<a href="https://money.udn.com/money/story/5612/9526606" target="_blank">經濟日報：光聖轉投資布局 CPO</a>、<a href="https://money.udn.com/money/story/5612/9460891" target="_blank">經濟日報：大立光切入矽光子 FAU（林恩平）</a>、<a href="https://www.wealth.com.tw/articles/a374e160-f795-42ec-bef9-d452bdeed8b2" target="_blank">財訊：環宇-KY 磊晶</a></p>
+</section>
+
+<section id="s8">
+<h2>8. 受惠個股逐檔詳述（各自競爭優勢）</h2>
+<p>「因 Glass Bridge / 玻璃基板讓自家產品需求變大」的受惠股。先看一個<strong>時間軸差異</strong>：檢測/設備（蔚華科、鈦昇、正達）是「現在就有訂單認列」的<strong>近端受惠</strong>；ABF 載板三雄（欣興、南電、景碩）是「2027 中～2028 才放量」的<strong>長線受惠</strong>。</p>
+
+<div class="card win">
+<h3>蔚華科 3055 <span class="tag t-win">TGV 檢測・最近端</span></h3>
+<p><span class="lbl">在做什麼</span>：自製<strong>玻璃基板/TGV（玻璃穿孔）非破壞性光學檢測設備</strong>（SpiroxLTS® 雷射斷層掃描、SP8000S 系統），檢測穿孔粗糙度、腰位、鍍銅、微裂與孔洞。</p>
+<p><span class="lbl">競爭優勢</span>：<strong>「賣鏟子」邏輯最乾淨</strong>——不論最後哪家玻璃基板/CPO 勝出、EC 還是 SGC，玻璃穿孔都要檢測。已取得<strong>國內頂尖晶圓代工大廠正式 PO，單台 5,000～7,000 萬元、高單價高毛利，2026 上半年起認列</strong>；另有一家全球晶圓巨頭與一家跨國記憶體大廠洽談驗證中，客戶擴散空間大。</p>
+<p><span class="lbl">現況/風險</span>：收 152.5 元、近日<strong>連續漲停</strong>；營收 lumpy（Apr 單月 1.26 億 YoY +336%、5 月回落）。<span class="flag">乖離極大、投機性高，追高風險顯著；須看訂單認列節奏與客戶擴散。</span></p>
+</div>
+
+<div class="card win">
+<h3>鈦昇 8027 <span class="tag t-win">TGV 雷射鑽孔・最純玻璃基板</span></h3>
+<p><span class="lbl">在做什麼</span>：掌握玻璃基板最難的製程——<strong>TGV 雷射鑽孔</strong>（在玻璃上打微米級穿孔），並成立「<strong>E-Core 聯盟</strong>」整合玻璃基板生態。</p>
+<p><span class="lbl">競爭優勢</span>：被市場<strong>公認為最純的玻璃基板概念股</strong>；雷射鑽孔是玻璃基板四大量產瓶頸之一，門檻高、替代性低；<strong>訂單能見度看到 2027</strong>，切入面板級封裝與先進製程。</p>
+<p><span class="lbl">現況/風險</span>：收 249 元（6 月自 283 回到 197 後反彈）。設備小型股、波動大；玻璃基板實際放量時程（2027 商業化）決定訂單延續性。</p>
+</div>
+
+<div class="card win">
+<h3>正達 3149 <span class="tag t-win">玻璃加工・康寧合作</span></h3>
+<p><span class="lbl">在做什麼</span>：具<strong>奈米級玻璃加工能力</strong>，切入半導體先進封裝所需玻璃基板加工，另有 HDD 玻璃疊構業務。</p>
+<p><span class="lbl">競爭優勢</span>：在客戶「<strong>去中化（derisking）</strong>」趨勢下，<strong>獲玻璃材料龍頭康寧主動接觸合作</strong>——關鍵背書；奈米級玻璃加工能力稀有，直接對上玻璃基板需求。</p>
+<p><span class="lbl">現況/風險</span>：收 87.2 元（6 月自 76 噴到 109 後回檔）。玻璃基板業務占比與訂單放量仍待驗證；股價波動大。</p>
+</div>
+
+<div class="card win">
+<h3>群創 3481 <span class="tag t-mid">面板級玻璃處理・CoPoS</span></h3>
+<p><span class="lbl">在做什麼</span>：面板廠轉先進封裝，<strong>FOPLP（扇出型面板級封裝）月產能逾 4,000 萬顆、良率佳</strong>，發展 <strong>CoPoS 玻璃基板與 TGV</strong> 技術。</p>
+<p><span class="lbl">競爭優勢</span>：<strong>把面板廠數十年的大尺寸玻璃處理經驗，直接嫁接到玻璃基板/面板級封裝</strong>——傳統 IC 載板廠沒有的規模與玻璃 know-how；產能大、良率佳。</p>
+<p><span class="lbl">現況/風險</span>：收 66 元、成交爆巨量。面板本業景氣拖累獲利，玻璃基板/先進封裝是轉機而非現金牛，兌現需時間。</p>
+</div>
+
+<div class="card win">
+<h3>欣興 3037 <span class="tag t-mid">ABF/玻璃核心載板・布局最完整</span></h3>
+<p><span class="lbl">在做什麼</span>：ABF 載板龍頭、<strong>Intel 研發夥伴</strong>，發展玻璃核心載板（與康寧在玻璃基板 + 下游 RDL 線路做技術驗證）。</p>
+<p><span class="lbl">競爭優勢</span>：<strong>高階 ABF 布局最完整、爆發潛力突出</strong>；玻璃核心載板<strong>可沿用既有大客戶關係、量產後受惠面最廣</strong>。載板產業 2025 走出谷底，2026 獲利可望明顯成長。</p>
+<p><span class="lbl">現況/風險</span>：大型載板股。<strong>玻璃核心載板放量要等 2027 中～2028</strong>，屬長線；且「玻璃基板 2030 前難完全取代 ABF」，短期仍是 ABF 本業驅動。</p>
+</div>
+
+<div class="card win">
+<h3>南電 8046 <span class="tag t-mid">大型交換器載板・長線最大受惠之一</span></h3>
+<p><span class="lbl">在做什麼</span>：高階網通晶片與大型交換器載板領先者。</p>
+<p><span class="lbl">競爭優勢</span>：<strong>在大型/高層數載板具領先地位</strong>，被視為玻璃載板時代<strong>長線最大受惠之一</strong>（交換器/CPO 平台需要更大、更高階載板）。</p>
+<p><span class="lbl">現況/風險</span>：同屬 ABF 三雄，長線受惠但放量偏 2027～2028；短期股價受 ABF 景氣與大盤情緒影響。</p>
+</div>
+
+<div class="card win">
+<h3>景碩 3189 <span class="tag t-mid">高階 ABF・綁美系 AI 大廠</span></h3>
+<p><span class="lbl">在做什麼</span>：高階 ABF 載板，產品組合往高階移動，<strong>與 NVIDIA、AMD 等美系 AI 晶片大廠合作</strong>。</p>
+<p><span class="lbl">競爭優勢</span>：綁美系 AI 大廠、高階 ABF 需求強；玻璃核心載板為長線升級選擇權。</p>
+<p><span class="lbl">現況/風險</span>：三雄中角色相對跟隨，長線受惠邏輯與欣興/南電相同，放量時程同樣偏 2027 後。</p>
+</div>
+
+<div class="summary"><strong>受惠股節奏總結</strong>：想抓「現在就有實績」→ 檢測/設備（蔚華科 TGV 檢測已有 PO、鈦昇 TGV 鑽孔訂單到 2027、正達 康寧合作）；想抓「長線最大、但要等」→ ABF 載板三雄（欣興布局最完整、南電長線最大、景碩綁美系，放量 2027 中～2028）。群創是「面板玻璃經驗嫁接先進封裝」的規模型轉機。此外，製程設備群（辛耘 3583、志聖 2467、群翊 6664、均華 6640、均豪 5443、大量 3167）屬「若切入客戶驗證才受惠」的條件式，須個別查證。</div>
+<p class="src">出處：<a href="https://www.moneyweekly.com.tw/ArticleData/Info/Article/235525" target="_blank">理財周刊：蔚華科 TGV</a>、<a href="https://leveragetw.com/glass-core-substrate-tgv/" target="_blank">槓桿學院：TGV 四大瓶頸</a>、<a href="https://tw.stock.yahoo.com/news/1%E8%A1%A8%E7%9C%8B-%E7%8E%BB%E7%92%83%E5%9F%BA%E6%9D%BF2030%E5%89%8D%E9%9B%A3%E5%8F%96%E4%BB%A3-%E6%AC%A3%E8%88%88-%E5%8D%97%E9%9B%BB-%E6%99%AF%E7%A2%A9-210230482.html" target="_blank">Yahoo：載板三雄、玻璃 2030 前難取代</a>、<a href="https://www.businessweekly.com.tw/business/blog/3021521" target="_blank">商周：玻璃基板供應鏈</a></p>
+</section>
+
+<section id="s9">
+<h2>9. 多空全景總表</h2>
+<table>
+<tr><th class="l">分類</th><th class="l">代表個股</th><th class="l">邏輯與時間軸</th></tr>
+<tr><td class="l"><span class="pos">受惠・近端（已有訂單）</span></td><td class="l">蔚華科 3055、鈦昇 8027、正達 3149</td><td class="l">TGV 檢測/鑽孔/玻璃加工，2026 起認列；股價已大漲、投機性高</td></tr>
+<tr><td class="l"><span class="pos">受惠・長線（要等放量）</span></td><td class="l">欣興 3037、南電 8046、景碩 3189、群創 3481</td><td class="l">玻璃核心載板/面板級封裝，放量 2027 中～2028</td></tr>
+<tr><td class="l"><span class="mid">規格+量產對、題材受挫</span></td><td class="l">上詮 3363、波若威 3163</td><td class="l">握 COUPE / NVIDIA design-in，賭 2026 H2 高速 FAU 量產兌現</td></tr>
+<tr><td class="l">影響較小（光需求仍成長）</td><td class="l">華星光 4979、眾達-KY 4977、前鼎 4908、聯亞 3081、光環 3234、環宇-KY 4991</td><td class="l">光模組/雷射/磊晶，非被替代環節；環宇-KY 偏被錯殺</td></tr>
+<tr><td class="l"><span class="flag">承壓／優先度低</span></td><td class="l">光聖 6442、聯鈞 3450、大立光 3008(CPO)、傳統可插拔模組</td><td class="l">傳統 FAU/對準生態或 CPO 非主業</td></tr>
+</table>
+</section>
+
+<section id="s10" class="final">
+<h2>10. 綜合判斷、風險與資料限制</h2>
+<p><span class="lbl">技術層面</span>：Glass Bridge 用玻璃波導 + 被動對準解決 CPO 對準痛點，走 EC 路線；EC 與 SGC 兩路線並存、未分高下，且耦合方式在 PIC 設計初期綁死、不可事後互換，規格收斂看 2026～2027。這決定了 Glass Bridge 短期難立刻搶走採 SGC 設計的客戶。</p>
+<p><span class="lbl">誰受惠（自家需求變大）</span>：核心在玻璃基板製造鏈——近端看檢測/設備（蔚華科 TGV 檢測已有 PO、鈦昇 TGV 鑽孔、正達 康寧合作），長線看 ABF 三雄（欣興、南電、景碩，2027 後放量）。</p>
+<p><span class="lbl">誰受衝擊</span>：傳統 FAU（上詮、波若威、光聖）短期承壓；但大摩/花旗認為 1～2 年難被實質顛覆，且 FAU 雙雄握 COUPE/NVIDIA design-in、往高速爬，2026 H2 量產與毛利率是勝負驗證。</p>
+<p><span class="lbl">誰影響較小</span>：光模組/雷射/磊晶廠（華星光、眾達-KY、聯亞、環宇-KY 等），因 AI 光需求持續放大，屬「型態變、需求增」。</p>
+<div class="warn">⚠ <strong>投資決策風險</strong>：① <strong>受惠邏輯成立 ≠ 現價便宜</strong>——蔚華科連續漲停、正達/鈦昇噴後回檔，設備小型股波動與投機性高。② 載板三雄是長線題材，放量 2027～2028，短期仍受 ABF 景氣與大盤情緒左右。③ FAU 雙雄能否守住，取決於客戶是否大舉倒向 Glass Bridge 玻璃方案，2026 H2 見真章。④ 玻璃基板/CPO 標準未定、良率未完全驗證，屬早期高風險題材。</div>
+<div class="warn">⚠ <strong>資料限制</strong>：NVIDIA/Broadcom 逐項 spec 非公開，EC/SGC 現況源自媒體與業者受訪；上詮量產時程（1.6T/3.2T/6.4T FAU）、蔚華科/鈦昇訂單、康寧與正達合作等多為法說與新聞轉述，尚待大規模營收實績驗證；ABF 三雄與部分設備股未逐一拉最新財務數據。</div>
+<div class="disclaimer">
+<strong>免責聲明</strong>：本報告為公開資訊整理，非投資建議。股價／營收為 FinMind API 實際數據（至 2026-07-03）；規格、design-in、受惠關係屬新聞/產業解讀，部分未經官方證實。玻璃基板/CPO 屬早期、標準未定、股價已大幅反映之高風險題材。使用者應自行至公開資訊觀測站與券商報告查證，並為自身投資決策負責。
+</div>
+</section>
+
+</div>
+</body>
+</html>
